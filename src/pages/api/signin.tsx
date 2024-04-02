@@ -16,6 +16,7 @@ export default async function handler(
     origin: "*",
     optionsSuccessStatus: 200,
   });
+  console.log("in backend", req.body);
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
@@ -23,11 +24,11 @@ export default async function handler(
   const { email, password } = data;
 
   try {
-    const token = await loginService(email, password);
-    if (token) {
+    const newToken = await loginService(email, password);
+    if (newToken) {
       return res
         .status(200)
-        .json({ token: token, message: "Login successful" });
+        .json({ token: newToken, message: "Login successful" });
     }
   } catch (e: any) {
     return res.status(400).json({ message: e.message });
