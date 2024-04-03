@@ -1,34 +1,32 @@
-import { UserModel } from "@/models/user-schema";
+import { UserModel } from "@/models/user.schema";
 import jwt from "jsonwebtoken";
 
 export const loginService = async (email: string, password: string) => {
   if (email == "admin@gmail.com" && password == "admin") {
     const userInfo = {
       email: email,
-      name: "Khosoo",
-    };
-    const adminToken = jwt.sign(userInfo, "my-super-duper-secret-key", {
-      expiresIn: "1h",
-    });
-    return adminToken;
-  } else {
-    const userInfo = {
-      email: email,
       name: "John Doe",
     };
-    const userToken = jwt.sign(userInfo, "my-super-duper-secret-key", {
+    const newToken = jwt.sign(userInfo, "my-super-duper-secret-key", {
       expiresIn: "1h",
     });
-    return userToken;
+    return newToken;
+  } else {
+    throw new Error("Invalid credentials");
   }
 };
 
 export const createUser = async (
-  firstName: string,
-  lastName: string,
+  name: string,
   email: string,
-  password: string
+  password: string,
+  address: string
 ) => {
-  const createUser = UserModel.create({ firstName, lastName, email, password });
+  const createUser = UserModel.create({
+    name,
+    email,
+    password,
+    address,
+  });
   return createUser;
 };

@@ -1,4 +1,8 @@
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { corsAllow } from "@/helper/cors";
+import connect from "@/helper/db";
 import { loginService } from "@/services/user";
+import mongoose from "mongoose";
 import type { NextApiRequest, NextApiResponse } from "next";
 import NextCors from "nextjs-cors";
 
@@ -11,24 +15,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  await NextCors(req, res, {
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    origin: "*",
-    optionsSuccessStatus: 200,
-  });
-  console.log("in backend", req.body);
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
-  }
+  await connect();
+  corsAllow(req, res);
   const data = req.body;
   const { email, password } = data;
 
   try {
-    const newToken = await loginService(email, password);
-    if (newToken) {
+    const token = await loginService(email, password);
+    if (token) {
       return res
         .status(200)
-        .json({ token: newToken, message: "Login successful" });
+        .json({ token: token, message: "Login successful" });
     }
   } catch (e: any) {
     return res.status(400).json({ message: e.message });
