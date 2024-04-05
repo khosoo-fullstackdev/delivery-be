@@ -1,8 +1,9 @@
 import { corsAllow } from "@/helper/cors";
 import { createUser } from "@/services/user";
+import connect from "@/helper/db";
 import type { NextApiResponse, NextApiRequest } from "next";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const register = async (req: NextApiRequest, res: NextApiResponse) => {
   corsAllow(req, res);
   if (
     !req.body?.name ||
@@ -12,6 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   ) {
     res.status(400).json("firstName, lastName,email is missing");
   }
+  await connect();
 
   const { name, email, password, address } = req.body;
 
@@ -24,4 +26,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default register;

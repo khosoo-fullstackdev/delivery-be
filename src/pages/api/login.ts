@@ -1,10 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { corsAllow } from "@/helper/cors";
 import connect from "@/helper/db";
-import { loginService } from "@/services/user";
-import mongoose from "mongoose";
+import { loginUser } from "@/services/user";
 import type { NextApiRequest, NextApiResponse } from "next";
-import NextCors from "nextjs-cors";
 
 type Data = {
   message?: string;
@@ -21,7 +19,7 @@ export default async function handler(
   const { email, password } = data;
 
   try {
-    const token = await loginService(email, password);
+    const token = await loginUser(email, password);
     if (token) {
       return res
         .status(200)
