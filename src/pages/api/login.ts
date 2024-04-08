@@ -4,22 +4,21 @@ import connect from "@/helper/db";
 import { loginUser } from "@/services/user";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  message?: string;
-  token?: string;
-};
+// type Data = {
+//   message?: string;
+//   token?: string;
+// };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   await connect();
-  corsAllow(req, res);
-  const data = req.body;
-  const { email, password } = data;
+  await corsAllow(req, res);
+  const body = req.body;
 
   try {
-    const token = await loginUser(email, password);
+    const token = await loginUser(body.email, body.password);
     if (token) {
       return res
         .status(200)

@@ -4,17 +4,24 @@ import { UserType } from "@/utils/types/user";
 import jwt from "jsonwebtoken";
 
 export const loginUser = async (email: string, password: string) => {
-  if (email == "admin@gmail.com" && password == "admin") {
-    const userInfo = {
-      email: email,
-      name: "John Doe",
-    };
-    const newToken = jwt.sign(userInfo, "my-super-duper-secret-key", {
-      expiresIn: "1h",
-    });
-    return newToken;
-  } else {
-    throw new Error("Invalid credentials");
+  const userInfo = {
+    email: email,
+    password: password,
+    name: "admin",
+  };
+  try {
+    const [gotUsers] = await getUsers();
+    console.log(gotUsers);
+    if (gotUsers.email == email && gotUsers.password == password) {
+      const newToken = jwt.sign(userInfo, process.env.PRIVATE_KEY as string, {
+        expiresIn: "1h",
+      });
+      return newToken;
+    } else {
+      return "iim hereglegch alga";
+    }
+  } catch (e: any) {
+    throw new Error(e.message);
   }
 };
 
@@ -35,8 +42,8 @@ export const createUser = async (
 
 export const getUsers = async (): Promise<UserType[]> => {
   try {
-    const categories = await CategoryModel.find();
-    return categories;
+    const users = await UserModel.find();
+    return users;
   } catch (e: any) {
     throw new Error(e.message);
   }
