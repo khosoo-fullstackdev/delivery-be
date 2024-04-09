@@ -4,22 +4,27 @@ import { UserType } from "@/utils/types/user";
 import jwt from "jsonwebtoken";
 
 export const loginUser = async (email: string, password: string) => {
-  const userInfo = {
-    email: email,
-    password: password,
-    name: "admin",
-  };
   try {
-    const [gotUsers] = await getUsers();
-    console.log(gotUsers);
-    if (gotUsers.email == email && gotUsers.password == password) {
-      const newToken = jwt.sign(userInfo, process.env.PRIVATE_KEY as string, {
-        expiresIn: "1h",
-      });
-      return newToken;
-    } else {
-      return "iim hereglegch alga";
+    const users = await getUsers();
+    const gotUsers = users.find(
+      (users) => users.email === email && users.password === password
+    );
+    if (!gotUsers) {
+      throw new Error("aaaaaaa");
     }
+    const key = process.env.PRIVATE_KEY;
+    if (!key) {
+      throw new Error("eeeeeee");
+    }
+    const userInfo = {
+      email: gotUsers.email,
+      password: gotUsers.password,
+      name: "admin",
+    };
+    const newToken = jwt.sign(userInfo, key, {
+      expiresIn: "1h",
+    });
+    return newToken;
   } catch (e: any) {
     throw new Error(e.message);
   }
