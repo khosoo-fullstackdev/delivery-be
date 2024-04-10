@@ -1,7 +1,7 @@
 import { corsAllow } from "@/helper/cors";
-import { createUser } from "@/services/user";
 import connect from "@/helper/db";
 import type { NextApiResponse, NextApiRequest } from "next";
+import { createUser } from "@/services/user";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   corsAllow(req, res);

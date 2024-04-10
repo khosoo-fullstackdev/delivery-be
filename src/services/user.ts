@@ -71,9 +71,10 @@ export const deleteUser = async (id: string) => {
   }
 };
 
-export const updateUser = async (id: string, updateInfo: Partial<UserType>) => {
+export const updateUser = async (email: string, password: string) => {
   try {
-    await CategoryModel.updateOne({ _id: id }, { updateInfo });
+    await UserModel.updateOne({ email }, { password });
+    return { message: "successful" };
   } catch (e: any) {
     throw new Error(e.message);
   }
