@@ -1,5 +1,6 @@
 import { corsAllow } from "@/helper/cors";
 import connect from "@/helper/db";
+import { getUsersById } from "@/services/user";
 import type { NextApiResponse, NextApiRequest } from "next";
 
 export default async function verify(
@@ -9,6 +10,12 @@ export default async function verify(
   await connect();
   await corsAllow(req, res);
   const body = req.body;
-
-  const myEmail = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
+  try {
+    const sent = await getUsersById(body.email, body.password);
+    if (sent.message == "valid") {
+      return res.json({ message: "Success: email was sent" });
+    }
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
 }

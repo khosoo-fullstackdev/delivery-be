@@ -42,5 +42,7 @@ export default async function reset(req: NextApiRequest, res: NextApiResponse) {
     } else {
       res.status(500).json({ message: "COULD NOT SEND MESSAGE" });
     }
-  } catch (error) {}
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
 }

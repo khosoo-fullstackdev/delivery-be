@@ -54,12 +54,12 @@ export const getUsers = async (): Promise<UserType[]> => {
   }
 };
 
-export const geUsersById = async (id: string) => {
+export const getUsersById = async (email: string, password: string) => {
   try {
-    const food = await CategoryModel.findOne({ _id: id });
-    return food;
+    const user = await UserModel.findOne({ email: email });
+    if (user.password == password) return { message: "valid" };
   } catch (e: any) {
-    throw new Error(e.message);
+    return e.message;
   }
 };
 
