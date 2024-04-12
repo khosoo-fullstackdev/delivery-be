@@ -2,8 +2,8 @@ import { corsAllow } from "@/helper/cors";
 import connect from "@/helper/db";
 import type { NextApiResponse, NextApiRequest } from "next";
 import { getUser, updateUser } from "@/services/user";
-const nodemailer = require("nodemailer");
 import { nanoid } from "nanoid";
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
