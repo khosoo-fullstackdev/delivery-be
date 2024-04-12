@@ -20,7 +20,7 @@ export default async function reset(req: NextApiRequest, res: NextApiResponse) {
   await connect();
   await corsAllow(req, res);
   const body = req.body;
-  console.log(body);
+
   const code = nanoid(6);
 
   try {
