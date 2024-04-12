@@ -14,7 +14,7 @@ export default async function setNewPassword(
   try {
     const sent = await updateUser(body.email, body.password);
     if (sent.message == "successful") {
-      return res.json({ message: "New password set" });
+      return res.status(200).json({ message: "New password set" });
     }
   } catch (e: any) {
     throw new Error(e.message);

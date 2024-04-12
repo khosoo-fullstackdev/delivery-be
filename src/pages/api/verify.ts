@@ -13,7 +13,7 @@ export default async function verify(
   try {
     const sent = await getUsersById(body.email, body.password);
     if (sent.message == "valid") {
-      return res.json({ message: "code checked" });
+      return res.status(200).json({ message: "code checked" });
     }
   } catch (e: any) {
     throw new Error(e.message);

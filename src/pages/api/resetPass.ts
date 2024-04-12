@@ -39,7 +39,7 @@ export default async function reset(req: NextApiRequest, res: NextApiResponse) {
             `,
       });
 
-      return res.json({ message: "Success: email was sent" });
+      return res.status(200).json({ message: "Success: email was sent" });
     } else {
       res.status(500).json({ message: "COULD NOT SEND MESSAGE" });
     }
