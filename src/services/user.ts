@@ -54,10 +54,25 @@ export const getUsers = async (): Promise<UserType[]> => {
   }
 };
 
-export const getUsersById = async (email: string, password: string) => {
+export const getUser = async (email: string) => {
   try {
     const user = await UserModel.findOne({ email: email });
-    if (user.password == password) return { message: "valid" };
+    if (user != null) {
+      return { message: "user found" };
+    } else return new Error();
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
+export const getUsersById = async (email: string, password: string) => {
+  console.log("email:", email);
+  console.log("password:", password);
+  try {
+    const user = await UserModel.findOne({ email: email });
+    if (user.password == password) {
+      return { message: "valid" };
+    } else return new Error();
   } catch (e: any) {
     return e.message;
   }

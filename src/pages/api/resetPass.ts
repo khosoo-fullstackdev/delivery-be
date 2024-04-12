@@ -1,7 +1,7 @@
 import { corsAllow } from "@/helper/cors";
 import connect from "@/helper/db";
 import type { NextApiResponse, NextApiRequest } from "next";
-import { updateUser } from "@/services/user";
+import { getUser, updateUser } from "@/services/user";
 const nodemailer = require("nodemailer");
 import { nanoid } from "nanoid";
 
@@ -20,12 +20,13 @@ export default async function reset(req: NextApiRequest, res: NextApiResponse) {
   await connect();
   await corsAllow(req, res);
   const body = req.body;
-
+  console.log(body);
   const code = nanoid(6);
 
   try {
-    const sent = await updateUser(body.email, code);
-    if (sent.message == "successful") {
+    const user = await getUser(body.email);
+    if (user.message == "user found") {
+      const sent = await updateUser(body.email, code);
       const mail = await transporter.sendMail({
         from: "DeliveryFoodProject",
         to: process.env.PERSONAL_EMAIL,
